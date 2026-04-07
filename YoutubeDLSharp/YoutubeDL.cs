@@ -113,9 +113,7 @@ namespace YoutubeDLSharp
             string outFile = string.Empty;
             var process = CreateYoutubeDLProcess();
             if (showArgs)
-                output?.Report($"Arguments: {process.ConvertToArgs(new[] { url }, options)}\n");
             else
-                output?.Report($"Starting Download: {url}");
             process.OutputReceived += (o, e) =>
             {
                 var match = rgxFilePostProc.Match(e.Data);
@@ -124,7 +122,6 @@ namespace YoutubeDLSharp
                     outFile = match.Groups[0].ToString().Replace("[download] Destination:", "").Replace(" ", "");
                     progress?.Report(new DownloadProgress(DownloadState.Success, data: outFile));
                 }
-                output?.Report(e.Data);
             };
             (int code, string[] errors) = await runner.RunThrottled(process, new[] { url }, options, ct, progress);
             return new RunResult<string>(code == 0, errors, outFile);
@@ -213,7 +210,6 @@ namespace YoutubeDLSharp
             string outputFile = String.Empty;
             var process = CreateYoutubeDLProcess();
             // Report the used ytdl args
-            output?.Report($"Arguments: {process.ConvertToArgs(new[] { url }, opts)}\n");
             process.OutputReceived += (o, e) =>
             {
                 var match = rgxFile.Match(e.Data);
@@ -222,7 +218,6 @@ namespace YoutubeDLSharp
                     outputFile = match.Groups[1].ToString().Trim('"');
                     progress?.Report(new DownloadProgress(DownloadState.Success, data: outputFile));
                 }
-                output?.Report(e.Data);
             };
             (int code, string[] errors) = await runner.RunThrottled(process, new[] { url }, opts, ct, progress);
             return new RunResult<string>(code == 0, errors, outputFile);
@@ -265,7 +260,6 @@ namespace YoutubeDLSharp
             var outputFiles = new List<string>();
             var process = CreateYoutubeDLProcess();
             // Report the used ytdl args
-            output?.Report($"Arguments: {process.ConvertToArgs(new[] { url }, opts)}\n");
             process.OutputReceived += (o, e) =>
             {
                 var match = rgxFile.Match(e.Data);
@@ -275,7 +269,6 @@ namespace YoutubeDLSharp
                     outputFiles.Add(file);
                     progress?.Report(new DownloadProgress(DownloadState.Success, data: file));
                 }
-                output?.Report(e.Data);
             };
             (int code, string[] errors) = await runner.RunThrottled(process, new[] { url }, opts, ct, progress);
             return new RunResult<string[]>(code == 0, errors, outputFiles.ToArray());
@@ -307,7 +300,6 @@ namespace YoutubeDLSharp
             var error = new List<string>();
             var process = CreateYoutubeDLProcess();
             // Report the used ytdl args
-            output?.Report($"Arguments: {process.ConvertToArgs(new[] { url }, opts)}\n");
             process.OutputReceived += (o, e) =>
             {
                 var match = rgxFile.Match(e.Data);
@@ -316,7 +308,6 @@ namespace YoutubeDLSharp
                     outputFile = match.Groups[1].ToString().Trim('"');
                     progress?.Report(new DownloadProgress(DownloadState.Success, data: outputFile));
                 }
-                output?.Report(e.Data);
             };
             (int code, string[] errors) = await runner.RunThrottled(process, new[] { url }, opts, ct, progress);
             return new RunResult<string>(code == 0, errors, outputFile);
@@ -357,7 +348,6 @@ namespace YoutubeDLSharp
             }
             var process = CreateYoutubeDLProcess();
             // Report the used ytdl args
-            output?.Report($"Arguments: {process.ConvertToArgs(new[] { url }, opts)}\n");
             process.OutputReceived += (o, e) =>
             {
                 var match = rgxFile.Match(e.Data);
@@ -367,7 +357,6 @@ namespace YoutubeDLSharp
                     outputFiles.Add(file);
                     progress?.Report(new DownloadProgress(DownloadState.Success, data: file));
                 }
-                output?.Report(e.Data);
             };
             (int code, string[] errors) = await runner.RunThrottled(process, new[] { url }, opts, ct, progress);
             return new RunResult<string[]>(code == 0, errors, outputFiles.ToArray());
