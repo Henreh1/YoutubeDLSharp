@@ -150,7 +150,6 @@ namespace YoutubeDLSharp
                     progress?.Report(new DownloadProgress(DownloadState.PostProcessing, 1));
                     isDownloading = false;
                 }
-                Debug.WriteLine("[yt-dlp] " + e.Data);
                 OutputReceived?.Invoke(this, e);
             };
             var tcsError = new TaskCompletionSource<bool>();
@@ -161,7 +160,6 @@ namespace YoutubeDLSharp
                     tcsError.SetResult(true);
                     return;
                 }
-                Debug.WriteLine("[yt-dlp ERROR] " + e.Data);
                 progress?.Report(new DownloadProgress(DownloadState.Error, data: e.Data));
                 ErrorReceived?.Invoke(this, e);
             };
@@ -187,7 +185,6 @@ namespace YoutubeDLSharp
                 }
                 catch { }
             });
-            Debug.WriteLine("[yt-dlp] Arguments: " + process.StartInfo.Arguments);
             if (!await Task.Run(() => process.Start()))
                 tcs.TrySetException(new InvalidOperationException("Failed to start yt-dlp process."));
             process.BeginOutputReadLine();
